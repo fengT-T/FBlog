@@ -3,13 +3,13 @@
  */
 /**
  * {
-		"_id": "用户的mongodb id",
-		"name": "用户名",
-		"headImgUrl": "头像链接"},
+ * "_id": "用户的mongodb id",
+ * "name": "用户名",
+ * "headImgUrl": "头像链接"},
  */
 export default {
   state: {
-    userInfo: sessionStorage.userInfo ? JSON.parse(sessionStorage.userInfo) : {},
+    userInfo: window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {}
   },
   mutations: {
     /**
@@ -17,9 +17,9 @@ export default {
      * @param state
      * @param payload
      */
-    setUserInfo(state, payload){
+    setUserInfo (state, payload) {
       state.userInfo = payload
-      sessionStorage.userInfo = JSON.stringify(state.userInfo)
+      window.sessionStorage.userInfo = JSON.stringify(state.userInfo)
     }
   }
 }

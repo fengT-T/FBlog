@@ -11,7 +11,7 @@ export default {
      * @param state
      * @param payload 数据对象
      */
-    incrementToast(state, payload){
+    incrementToast (state, payload) {
       state.toastList.push(payload)
     },
     /**
@@ -19,7 +19,7 @@ export default {
      * @param state
      * @param payload 数据的index
      */
-    deleteToast(state, payload){
+    deleteToast (state, payload) {
       state.toastList.splice(payload, 1)
     },
     /**
@@ -27,15 +27,14 @@ export default {
      * @param state
      * @constructor
      */
-    ShiftToast(state, payload){
-      if (state.toastList[0] === payload)
-        state.toastList.shift()
-    },
+    ShiftToast (state, payload) {
+      if (state.toastList[0] === payload) { state.toastList.shift() }
+    }
   },
   actions: {
     incrementToastAndShift ({commit}, payload) {
       commit('incrementToast', payload)
-      //五秒钟删除
+      // 五秒钟删除
       setTimeout(function () {
         commit('ShiftToast', payload)
       }, 5000)
