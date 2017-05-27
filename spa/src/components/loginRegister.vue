@@ -135,6 +135,7 @@
         } catch (e) {
           //后台默认遇到第一条错误就终止，所以一般默认只返回一条错误
           let data = e.response.data
+          //ErrorBag 错误约定 http://vee-validate.logaretm.com/api.html#error-bag
           this.$validator.errorBag.add(data[0], data[1], data[2], type)
         }
       },

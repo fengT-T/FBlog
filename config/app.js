@@ -10,6 +10,9 @@ let config = {
     httpOnly: true, /** (boolean) httpOnly or not (default true) */
     signed: false, /** (boolean) signed or not (default true) */// 加密个锤子session存redis
     store: require('../bin/sessionStore')
+  },
+  mongodb: {
+    connUrl: 'mongodb://localhost:27017/blog'
   }
 }
 module.exports = config

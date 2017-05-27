@@ -1,20 +1,93 @@
 <template>
-  <div>
-    <f-nav></f-nav>
-    <article-list v-for="i in 10" key="i"></article-list>
+  <div class="article-list">
+    <article-item v-for="item in articleList"
+                  :article="item"
+                  :key="item._id"
+    ></article-item>
+    <div class="big-divider"></div>
+    <div class="loading" v-show="isLoading"></div>
+    <div class="divider text-center" data-content="没有了" v-show="isEnd"></div>
   </div>
-
 </template>
 <script>
-  import FNav from "./nav.vue"
-  import ArticleList from "./article_list.vue"
+  import articleItem from "./articleItem.vue"
 
   export default{
     components: {
-      FNav,ArticleList
+      articleItem
+    },
+    computed: {
+      type(){
+        return this.$route.params.type
+      },
+      articleList(){
+        return this.$store.state.articleList.articleList[this.type]
+      },
+      isEnd(){
+        return this.$store.state.articleList.isEnd[this.type]
+      },
+      isLoading(){
+        return this.$store.state.articleList.isLoading
+      }
+    },
+    methods: {
+      async more(){
+        if (this.isLoading || this.isEnd) {//加载中和截止不触发
+          return
+        }
+        let url = ""
+        let tag = this.type === "all" ? "" : `&tag=${this.type}`
+        if (this.articleList) {//说明已经不是第一次了
+          let startId = this.articleList.slice(-1)[0]._id//其实就是最后一个元素的_id
+          url = `/article/list?operate=next&startId=${startId}`
+        } else {
+          url = "/article/list?operate=first"
+        }
+        url = url + tag
+        this.$store.commit("setArticleListLoading")
+        try {
+          let list = (await this.$http.get(url)).data
+          this.$store.commit("addArticleList", {
+            data: list, type: this.type
+          })
+          if (!list.length < 10) {
+            this.$store.commit("setEnd", [this.type])
+          }
+        } catch (e) {
+
+        }
+        this.$store.commit("setArticleListLoading")
+      }
+    },
+    watch: {
+      "type": async function (val, oldVal) {
+        console.log(this.type)
+        this.more()
+      }
+    },
+    async mounted()
+    {
+      await this.more()//获取了第一页再注册滚动时间，不然undefined报错
+      window.addEventListener("scroll", (e) => {
+        let offet = document.body.scrollTop + document.documentElement.clientHeight
+        let height = document.documentElement.offsetHeight
+        if ((height - offet) <= 10) {
+          this.more()
+        }
+      })
     }
   }
 </script>
-<style>
+<style scoped>
+  .article-list {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    margin-bottom: 80px;
+  }
 
+  .big-divider {
+    height: 50px;
+  }
 </style>

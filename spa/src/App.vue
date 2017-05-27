@@ -1,24 +1,33 @@
 <template>
   <div id="app">
     <F-Toast></F-Toast>
+    <f-nav></f-nav>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import toast from "./components/toast.vue"
-export default {
-  name: 'app',
-  components:{
-    'F-Toast':toast
+  import FNav from "./components/nav.vue"
+  import FToast from "./components/toast.vue"
+  export default {
+    name: 'app',
+    components: {
+      FNav,
+      FToast
+    }
   }
-}
 </script>
 
 <style>
-  a{
+
+  .light {
+    color: rgba(0, 0, 0, .44);
+  }
+
+  a {
     transform: translateZ(0);
   }
+
   a:before {
     content: '';
     position: absolute;

@@ -1,5 +1,9 @@
 /**
  * Created by feng on 17-5-17.
+ * {
+ *   desc: "注册成功,请登录",
+ *   'toast-success': true
+ *}
  */
 export default {
   state: {
@@ -28,7 +32,9 @@ export default {
      * @constructor
      */
     ShiftToast (state, payload) {
-      if (state.toastList[0] === payload) { state.toastList.shift() }
+      if (state.toastList[0] === payload) {
+        state.toastList.shift()
+      }
     }
   },
   actions: {

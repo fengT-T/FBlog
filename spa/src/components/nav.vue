@@ -3,7 +3,7 @@
   <div>
     <header class="navbar nav">
       <section class="navbar-section">
-        <a href="#" class="navbar-brand mr-10 nav-left">
+        <a href="/" class="navbar-brand mr-10 nav-left">
           <img src="/static/logo.png" class="logo">
           <span class="blog_title">FBlog</span>
         </a>
@@ -16,19 +16,24 @@
               <i class="icon icon-caret"></i></a>
             <ul class="menu">
               <li class="menu-item">
-                <a href="#dropdowns">
+                <router-link to="/list/HTML">
                   HTML
-                </a>
+                </router-link>
               </li>
               <li class="menu-item">
-                <a href="#dropdowns">
+                <router-link to="/list/css">
                   css
-                </a>
+                </router-link>
               </li>
               <li class="menu-item">
-                <a href="#dropdowns">
+                <router-link to="/list/JavaScript">
                   JavaScript
-                </a>
+                </router-link>
+              </li>
+              <li class="menu-item">
+                <router-link to="/list/all">
+                  All
+                </router-link>
               </li>
             </ul>
           </div>
@@ -40,7 +45,7 @@
           <button v-show="!userInfo.name" @click="show_login = true" class="btn btn-link">Sign in/Sgin up</button>
         </div>
         <figure v-show="userInfo.name" class="avatar">
-          <img :src="userInfo.headImgUrl"/>
+          <img v-lazy="userInfo.headImgUrl"/>
         </figure>
       </section>
     </header>
@@ -50,12 +55,12 @@
   </div>
 </template>
 <script>
-  import loginRegister from './login_register.vue'
+  import loginRegister from './loginRegister.vue'
 
   export default{
     data(){
       return {
-        show_login: false
+        show_login: false,
       }
     },
     computed: {
@@ -71,13 +76,13 @@
      * @returns {Promise.<void>}
      */
     async mounted(){
-        //本地存储密码 和 session存储是否登录
+      //本地存储密码 和 session存储是否登录
       if (localStorage.rememberData && !this.userInfo.name) {
         try {
           let data = await this.$http.post('/login', JSON.parse(localStorage.rememberData))
           this.$store.commit("setUserInfo", data.data)
         } catch (e) {
-            //可能设置了恶意值，给无情清除
+          //可能设置了恶意值，给无情清除
           localStorage.removeKey("rememberData")
         }
       }
@@ -87,13 +92,9 @@
 <style scoped>
   .nav {
     padding-top: 30px;
-    width: 70%;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
-  }
-
-  a.nav-left {
-    margin-bottom: -13px;
   }
 
   img.logo {
@@ -101,7 +102,12 @@
   }
 
   .dropdown {
+    z-index: 101;
     text-align: left;
+  }
+
+  .dropdown {
+    margin-top: -7px;
   }
 
   .blog_title {
@@ -110,7 +116,7 @@
     top: -5px;
   }
 
-  .navbar-brand {
-
+  .dropdown-toggle {
+    margin-top: -5px;
   }
 </style>
