@@ -10,6 +10,7 @@
 export default {
   state: {
     userInfo: window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {},
+    imageList:[],
     articleList: [],
     page: 1,
     isEnd: false
