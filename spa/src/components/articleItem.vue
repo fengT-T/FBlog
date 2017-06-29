@@ -1,33 +1,40 @@
 <template>
 
-    <div class="article-item">
-      <h4>
-        <router-link :to="`/article/${article._id}`">{{article.title}}</router-link>
-      </h4>
-      <div class="time">
-        作者：<a href="">
+  <div class="article-item">
+    <h3>
+      <router-link :to="`/article/${article._id}`">{{article.title}}</router-link>
+    </h3>
+    <div class="time">
+      <span v-show="show_name">作者：
+        <router-link :to="`/userPage/${article.author._id}`">
         {{article.author.name}}
-      </a>&nbsp; - &nbsp;发表于 {{getTimeFromId(article._id)}}
-        &nbsp;&nbsp;
-        <span class="label" v-for="tag in article.tag">{{tag}}</span>
-      </div>
-      <p> {{article.summary}}</p>
+        </router-link>
+        &nbsp; - &nbsp;
+      </span> 发表于 {{getTimeFromId(article._id)}} &nbsp;&nbsp;
+      <span class="label" v-for="tag in article.tag">{{tag}}</span>
     </div>
+    <p> {{article.summary}}</p>
+  </div>
 
 </template>
 <script>
-
-  export default{
-    data(){
+  export default {
+    data() {
       return {}
     },
-    props:['article'],
-    methods:{
-      getTimeFromId(id){
+    computed:{
+      show_name(){
+        return this.article.author.name ? true : false
+      }
+    },
+    props: ['article'],
+    methods: {
+      getTimeFromId(id) {
         return common.dateFormat(common.getDateFromMongodbId(id), "yyyy-MM-dd")
       }
     }
   }
+
 </script>
 <style scoped="">
   a {
@@ -63,11 +70,6 @@
     transform: scaleX(1);
   }
 
-
-  .article-item {
-    margin-top: 80px;
-  }
-
   .time {
     color: #999;
     font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
@@ -82,12 +84,10 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
   }
-
   /*.divider[data-content]::after, .divider-vert[data-content]::after {*/
-    /*color: #5764c6;*/
+  /*color: #5764c6;*/
   /*}*/
-
   /*.divider {*/
-    /*border-top: .1rem solid #5764c6;*/
+  /*border-top: .1rem solid #5764c6;*/
   /*}*/
 </style>

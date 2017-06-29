@@ -38,7 +38,7 @@ Vue.use(VeeValidate, {
   locale: 'zh_CN'
 })
 Vue.use(Vuex)
-Vue.use(VueLazyload,{
+Vue.use(VueLazyload, {
   loading: 'http://blogstatic-1252075019.cosgz.myqcloud.com/hourglass.svg',
   attempt: 1
 })
@@ -47,7 +47,7 @@ const store = new Vuex.Store({
 })
 
 Vue.config.productionTip = false
-//注册全局组件
+// 注册全局组件
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

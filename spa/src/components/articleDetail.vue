@@ -3,8 +3,7 @@
     <div class="author columns">
       <div class="column col-1">
         <figure class="avatar avatar-lg">
-          <img v-lazy="articleDate.author.headImgUrl+'?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim'"
-          />
+          <img v-lazy="articleDate.author.headImgUrl+'?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim'"/>
         </figure>
       </div>
       <div class="column col-11">
@@ -35,7 +34,7 @@
           _id:"0",
           title:"loading",
           author:{
-            headImgUrl:false,
+            headImgUrl:"",
           }
         }
       }
@@ -46,11 +45,7 @@
       },
     },
     async mounted(){
-      try {
         this.articleDate = (await this.$http.get(`/article/info?articleId=${this.$route.params.articleId}`)).data
-      } catch (e) {
-
-      }
     }
   }
 </script>

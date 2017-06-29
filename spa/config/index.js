@@ -7,8 +7,9 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    productionSourceMap: true,
+    //自己的腾讯云bucket
+    assetsPublicPath: 'http://blogstatic-1252075019.cosgz.myqcloud.com',
+    productionSourceMap: false,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -30,7 +31,9 @@ module.exports = {
     proxyTable: {
       '/register': 'http://localhost:3000/',
       '/login': 'http://localhost:3000/',
-      '/article/**': 'http://localhost:3000/'
+      '/article/**': 'http://localhost:3000/',
+      '/user/**': 'http://localhost:3000/',
+      '/userOpen/**': 'http://localhost:3000/'
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

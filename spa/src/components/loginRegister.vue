@@ -47,10 +47,9 @@
                 <label class="form-switch">
                   <input type="checkbox" v-model="loginData.remember"/>
                   <i class="form-icon"></i> Remember me
-
                 </label><a href="">Forgot password?</a>
               </div>
-              <button class="btn btn-primary btn-block" @click="submit('login')"> Sign in </button>
+              <button class="btn btn-primary btn-block" :class="{'loading':isLoading.login}" @click="submit('login')"> Sign in </button>
             </div>
           </form>
 
@@ -88,7 +87,7 @@
                 <p class="form-input-hint is-success" v-show="errors.has('register.code')">
                   {{ errors.first('register.code')}}</p>
               </div>
-              <button class="btn btn-primary btn-block" @click="submit('register')"> Sign up </button>
+              <button class="btn btn-primary btn-block" :class="{'loading':isLoading.register}" @click="submit('register')"> Sign up </button>
             </div>
           </form>
 
@@ -108,7 +107,11 @@
         is_login: true,
         registerData: {name: "", password: "", code: ""},
         loginData: {name: "", password: "", remember: false},
-        error: {}
+        error: {},
+        isLoading:{
+          register:false,
+          login:false
+        }
       }
     },
     methods: {
@@ -127,6 +130,7 @@
           return
         }
         //b登录 or 注册
+        this.isLoading[type] = true
         try {
           let data = await this.$http.post(`\\${type}`, this[type+'Data'])
           data = data.data
@@ -138,6 +142,7 @@
           //ErrorBag 错误约定 http://vee-validate.logaretm.com/api.html#error-bag
           this.$validator.errorBag.add(data[0], data[1], data[2], type)
         }
+        this.isLoading[type] = false
       },
       /**
        * 登录成功之后要处理的事情

@@ -3,7 +3,7 @@
  */
 import toast from './toast'
 import user from './user'
-import articleList from "./articleList"
+import articleList from './articleList'
 export default {
-  toast, user,articleList
+  toast, user, articleList
 }

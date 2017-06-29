@@ -1,10 +1,11 @@
 <!-- 这个是导航栏-->
+<!--但是用户自动登录逻辑也在里面-->
 <template>
   <div>
     <header class="navbar nav">
       <section class="navbar-section">
-        <a href="/" class="navbar-brand mr-10 nav-left">
-          <img src="/static/logo.png" class="logo">
+        <a href="#/" class="navbar-brand mr-10 nav-left">
+          <img src="http://blogstatic-1252075019.cosgz.myqcloud.com/static/logo.png" class="logo">
           <span class="blog_title">FBlog</span>
         </a>
 
@@ -12,28 +13,13 @@
           <div class="dropdown">
             <a class="btn btn-link dropdown-toggle" tabindex="0">
               <i class="icon icon-bookmark"></i>
-              Label
+              {{label}}
               <i class="icon icon-caret"></i></a>
             <ul class="menu">
-              <li class="menu-item">
-                <router-link to="/list/HTML">
-                  HTML
-                </router-link>
-              </li>
-              <li class="menu-item">
-                <router-link to="/list/css">
-                  css
-                </router-link>
-              </li>
-              <li class="menu-item">
-                <router-link to="/list/JavaScript">
-                  JavaScript
-                </router-link>
-              </li>
-              <li class="menu-item">
-                <router-link to="/list/all">
-                  All
-                </router-link>
+              <li class="menu-item" v-for="item in labelList">
+                <a :href="'#/list/'+item" @click="label = item">
+                  {{item}}
+                </a>
               </li>
             </ul>
           </div>
@@ -44,11 +30,14 @@
         <div class="input-group input-inline">
           <button v-show="!userInfo.name" @click="show_login = true" class="btn btn-link">Sign in/Sgin up</button>
         </div>
-        <figure v-show="userInfo.name" class="avatar">
-          <img v-lazy="userInfo.headImgUrl"/>
-        </figure>
+        <router-link to="/user">
+          <figure v-show="userInfo.name" @click="show_modify = true" class="avatar">
+            <img v-lazy="userInfo.headImgUrl+'?imageView2/1/w/200/h/200/interlace/1/q/75|imageslim'"/>
+          </figure>
+        </router-link>
       </section>
     </header>
+    <!--登录注册控件-->
     <login-register v-show="show_login"
                     @close="show_login=false"
     ></login-register>
@@ -56,11 +45,15 @@
 </template>
 <script>
   import loginRegister from './loginRegister.vue'
-
+  import userInfoModify from './userInfoModify.vue'
   export default{
     data(){
       return {
         show_login: false,
+        label:"all",
+        labelList:[
+          'HTML','css','JavaScript','all'
+        ]
       }
     },
     computed: {
@@ -69,7 +62,7 @@
       }
     },
     components: {
-      loginRegister
+      loginRegister, userInfoModify
     },
     /**
      * 自动登录
@@ -83,7 +76,7 @@
           this.$store.commit("setUserInfo", data.data)
         } catch (e) {
           //可能设置了恶意值，给无情清除
-          localStorage.removeKey("rememberData")
+          localStorage.removeItem("rememberData")
         }
       }
     }
@@ -92,7 +85,7 @@
 <style scoped>
   .nav {
     padding-top: 30px;
-    width: 80%;
+    max-width: 1000px!important;
     margin-left: auto;
     margin-right: auto;
   }

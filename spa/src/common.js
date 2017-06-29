@@ -2,6 +2,7 @@
  * Created by feng on 17-5-25.
  */
 export default{
+
   /**
    * 你懂得，就是从mongodb里面提取时间戳
    * @param id
@@ -56,5 +57,5 @@ export default{
       }
     }
     return fmt
-  },
+  }
 }

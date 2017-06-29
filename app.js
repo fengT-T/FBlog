@@ -1,9 +1,9 @@
 const Koa = require('koa')
 const app = new Koa()
-const views = require('koa-views')
+// const views = require('koa-views')
 const json = require('koa-json')
 // const onerror = require('koa-onerror')
-const errorHandle = require("./bin/errorHandle")
+const errorHandle = require('./bin/errorHandle')
 const koaBody = require('koa-body')
 const logger = require('koa-logger')
 const session = require('koa-session')
@@ -14,18 +14,18 @@ const conf = require('./config/app')
 
 // error handler
 // onerror(app)
-//my error handle
+// my error handle
 app.use(errorHandle)
 // middlewares
 app.use(koaBody())
 app.use(session(conf.session, app))
 app.use(json())
 app.use(logger())
-app.use(require('koa-static')(path.join(__dirname, 'public')))
+// app.use(require('koa-static')(path.join(__dirname, 'public')))
 
-app.use(views(path.join(__dirname, 'views'), {
-  extension: 'pug'
-}))
+// app.use(views(path.join(__dirname, 'views'), {
+//   extension: 'pug'
+// }))
 
 // logger
 app.use(async (ctx, next) => {
@@ -59,4 +59,7 @@ glob.sync('./routes/*.js').forEach(function (file) {
   let route = require(file)
   app.use(route.routes(), route.allowedMethods())
 })
+global.ERROR = {}
+global.ERROR.INPUTERROR = 'Suprise!MotherFucker!'
+global.ERROR.DEFAULTINPUTERROR = [422, global.ERROR.INPUTERROR]
 module.exports = app

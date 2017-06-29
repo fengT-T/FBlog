@@ -9,7 +9,10 @@
  */
 export default {
   state: {
-    userInfo: window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {}
+    userInfo: window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {},
+    articleList: [],
+    page: 1,
+    isEnd: false
   },
   mutations: {
     /**
@@ -20,6 +23,16 @@ export default {
     setUserInfo (state, payload) {
       state.userInfo = payload
       window.sessionStorage.userInfo = JSON.stringify(state.userInfo)
+    },
+    addUserArticleList (state, payload) {
+      // payload.map((e) => {
+      //   e.author = state.userInfo// 加上用户信息
+      // })
+      state.page = state.page ++
+      state.articleList = state.articleList.concat(payload)
+    },
+    setUserArticleListEnd (state) {
+      state.isEnd = true
     }
   }
 }

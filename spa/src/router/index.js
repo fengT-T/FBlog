@@ -24,6 +24,20 @@ export default new Router({
       component: (resolve) => {
         resolve(require('@/components/articleDetail'))
       }
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: (resolve) => {
+        resolve(require('@/components/user'))
+      }
+    },
+    {
+      path: '/userPage/:id',
+      name: 'userPage',
+      component: (resolve) => {
+        resolve(require('@/components/userPage'))
+      }
     }
   ]
 })
