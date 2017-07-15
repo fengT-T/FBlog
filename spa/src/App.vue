@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import FNav from "./components/nav.vue"
-  import FToast from "./components/toast.vue"
+  import FNav from './components/nav.vue'
+  import FToast from './components/toast.vue'
   export default {
     name: 'app',
     components: {

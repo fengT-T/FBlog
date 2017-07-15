@@ -68,4 +68,7 @@ router.post('/createArticle', async function (ctx, next) {
   ctx.status = 200
 })
 
+router.get('/info', async function (ctx, next) {
+  ctx.body = ctx.session.user
+})
 module.exports = router

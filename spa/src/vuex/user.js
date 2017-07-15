@@ -7,33 +7,42 @@
  * "name": "用户名",
  * "headImgUrl": "头像链接"},
  */
+import http from 'axios'
 export default {
   state: {
-    userInfo: window.sessionStorage.userInfo ? JSON.parse(window.sessionStorage.userInfo) : {},
-    imageList:[],
+    userInfo: {},
+    imageList: [],
     articleList: [],
     page: 1,
     isEnd: false
   },
   mutations: {
-    /**
-     * 这个userinfo是绑定到sessionStorage.userInfo上的，纯属闲的蛋疼啦
-     * @param state
-     * @param payload
-     */
     setUserInfo (state, payload) {
       state.userInfo = payload
-      window.sessionStorage.userInfo = JSON.stringify(state.userInfo)
     },
     addUserArticleList (state, payload) {
-      // payload.map((e) => {
-      //   e.author = state.userInfo// 加上用户信息
-      // })
-      state.page = state.page ++
+      state.page = state.page + 1
       state.articleList = state.articleList.concat(payload)
     },
     setUserArticleListEnd (state) {
       state.isEnd = true
+    }
+  },
+  actions: {
+    async getUserInfo ({commit}) {
+      // 是否含有session
+      try {
+        let info = await http.get('/user/info')
+        commit('setUserInfo', info.data)
+      } catch (e) {}
+      if (window.localStorage.rememberData) { // 本地localStorage存储密码
+        try {
+          let data = await http.post('/login', JSON.parse(window.localStorage.rememberData))
+          commit('setUserInfo', data.data)
+        } catch (e) {
+          window.localStorage.removeItem('rememberData') // 可能设置了恶意值，给无情清除
+        }
+      }
     }
   }
 }

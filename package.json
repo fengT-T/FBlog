@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "debug": "^2.6.8",
+    "eslint-plugin-html": "^3.1.0",
     "glob": "^7.1.2",
     "ioredis": "^2.5.0",
     "koa": "^2.3.0",
@@ -21,10 +22,11 @@
     "koa-logger": "^2.0.1",
     "koa-onerror": "^1.2.1",
     "koa-router": "^7.2.1",
-    "koa-session": "^5.3.0",
+    "koa-session": "^5.4.0",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
-    "mongoose": "^4.11.0",
+    "mongoose": "^4.11.3",
+    "mquery": "^2.3.1",
     "pug": "^2.0.0-rc.2",
     "qiniu": "^6.1.13"
   },

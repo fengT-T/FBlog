@@ -49,7 +49,9 @@ app.use(async (ctx, next) => {
 // mongoose promise替换
 mongoose.Promise = global.Promise
 // 打开连接
-mongoose.connect(conf.mongodb.connUrl)
+mongoose.connect(conf.mongodb.connUrl, {
+  useMongoClient: true
+})
 // mongoose.connect(conf.mongodb.connUrl, {config: { autoIndex: false }});
 /***
  * 最后永远是routes
