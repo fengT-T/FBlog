@@ -16,7 +16,7 @@
             <a href="javascript:void(0);" @click="select = 'Settings'" :class="{'active':select === 'Settings'}"> Settings </a>
           </li>
           <li class="menu-item">
-            <a href="javascript:void(0);" @click="select = 'Blog'" :class="{'active':select === 'Blog'}"> Blog </a>
+            <a href="javascript:void(0);" @click="showBlog" :class="{'active':select === 'Blog'}"> Blog </a>
           </li>
           <li class="menu-item">
             <a href="javascript:void(0);" @click="select = 'ImageUpload'" :class="{'active':select === 'ImageUpload'}"> Image Upload </a>
@@ -55,8 +55,12 @@
           <button class="btn btn-block" @click="userInfoModify">Submit</button>
         </div>
         <!--这个是博客文章-->
-        <div v-show="select === 'Blog'">
-          <aritle-item v-for="item in articleList" :article="item" :key="item._id"></aritle-item>
+        <div v-show="select === 'Blog'" @click="modifyArticle">
+          <aritle-item v-for="(item,index) in articleList" :article="item" :key="item._id">
+            <button class="float-right btn btn-link" slot="edit" :f-index="index">
+              <i class="icon icon-edit" :f-index="index"></i>
+            </button>
+          </aritle-item>
           <div class="text-center">
             <!--loading状态不能再点击，有点厉害的这个css框架-->
             <button class="btn btn-link" v-show="!isEnd" :class="{'loading':loading}" @click="moreBlog">More</button>
@@ -82,8 +86,8 @@
             <textarea class="form-input" v-model="edit.data.content" placeholder="Just input you html" rows="15"></textarea>
           </div>
           <div class="form-group">
-            <input class="form-input" v-model="edit.data.tag" type="text" placeholder="Tag 多个标签使用;分割" /> Tag:
-            <span class="label" v-for="(item,index) in tagList" :key="index">{{item}}</span>
+            <input class="form-input" v-model="tagString" type="text" placeholder="Tag 多个标签使用;分割" /> Tag:
+            <span class="label" v-for="(item,index) in this.edit.data.tag" :key="index">{{item}}</span>
           </div>
           <div class="popover popover-top form-group">
             <button class="btn btn-link">Some Tips</button>
@@ -122,7 +126,7 @@ export default {
       loading: false,
       edit: {
         data: {
-          title: '', summary: '', content: '', tag: ''
+          title: '', summary: '', content: '', tag: []
         },
         loading: false
       },
@@ -139,22 +143,36 @@ export default {
       page: state => state.user.page,
       isEnd: state => state.user.isEnd
     }),
-    tagList: {
+    tagString: {
       set (newValue) {
-        newValue.reduce((acc, val) => {
-          return `${acc};${val}`
-        })
+        this.edit.data.tag = newValue.split(';')
       },
       get () {
-        return this.edit.data.tag.split(';')
+        if (!this.edit.data.tag.length) {
+          return ''
+        }
+        return this.edit.data.tag.reduce((acc, val) => {
+          return `${acc};${val}`
+        })
       }
     }
   },
   methods: {
+    async showBlog () {
+      this.select = 'Blog'
+      if (!this.articleList.length) {
+        this.moreBlog()
+      }
+    },
+    modifyArticle (event) {
+      let index = event.target.getAttribute('f-index')
+      this.edit.data = JSON.parse(JSON.stringify(this.articleList[index]))
+      this.select = 'Create'
+    },
     async createArticle () {
       this.edit.loading = true
-      await this.$http.post('/user/createArticle', this.edit.data)
-      this.edit.loading = false
+      await this.$http.post(`/user/${this.edit.data._id ? 'modifyArticle' : 'createArticle'}`, this.edit.data)
+      this.edit = {data: {title: '', summary: '', content: '', tag: []}, loading: false}
     },
     async userInfoModify () {
       this.$validator.errorBag.clear()  // 清除报错
@@ -183,7 +201,7 @@ export default {
     async logout () {
       await this.$http.get('/user/logout')
       window.localStorage.removeItem('rememberData')
-      this.$store.commit('setUserInfo', {})
+      this.$store.commit('initUser')
       this.$router.push('/')
     },
     /**
@@ -203,9 +221,6 @@ export default {
   * 挂载前，主要是注册监听拖动事件
   **/
   async mounted () {
-    if (!this.articleList.length) {
-      this.moreBlog()
-    }
     window.document.addEventListener('drop', async (evt) => {
       evt.stopPropagation() // 禁止默认处理方法
       evt.preventDefault() // 禁止默认处理方法

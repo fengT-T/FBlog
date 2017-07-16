@@ -53,8 +53,7 @@ router.get('/list', async (ctx, next) => {
 router.get('/userArticleList', async function (ctx, next) {
   let list = await ctx.model.Article.find({
     author: ctx.request.query.userId
-  }).select(ARTICELSUMMARYFIELD)
-    .limit(5)
+  }).limit(5)
     .skip(+ctx.request.query.offset || 0)               // 无奈啊，好像get方法传过来的参数只能是字符串，+转成number
     .exec()
   ctx.body = list

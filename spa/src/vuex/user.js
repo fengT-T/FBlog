@@ -17,6 +17,12 @@ export default {
     isEnd: false
   },
   mutations: {
+    initUser (state) {
+      state.userInfo = {}
+      state.articleList = []
+      state.isEnd = false
+      state.page = 1
+    },
     setUserInfo (state, payload) {
       state.userInfo = payload
     },
