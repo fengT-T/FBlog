@@ -60,12 +60,13 @@ router.get('/uploadToken', function (ctx, next) {
 
 router.post('/createArticle', async function (ctx, next) {
   ctx.request.body.author = { _id: ctx.session.user._id }
+  let article
   try {
-    await new ctx.model.Article(ctx.request.body).save()
+    article = await new ctx.model.Article(ctx.request.body).save()
   } catch (e) {
     ctx.throw(...global.ERROR.DEFAULTINPUTERROR)
   }
-  ctx.status = 200
+  ctx.body = article
 })
 
 router.post('/modifyArticle', async function (ctx, next) {
@@ -77,6 +78,16 @@ router.post('/modifyArticle', async function (ctx, next) {
   } catch (e) {
     ctx.throw(...global.ERROR.DEFAULTINPUTERROR)
   }
+  ctx.status = 200
+})
+
+router.get('/deleteArticle', async function (ctx, next) {
+  let { Article } = ctx.model
+  let { id } = ctx.request.query
+  let { user } = ctx.session
+  let article = await Article.findById(id).exec()
+  ctx.assert(user._id === article.author.toString(), ...global.ERROR.DEFAULTINPUTERROR)
+  await Article.deleteOne({ _id: article.id }).exec()
   ctx.status = 200
 })
 

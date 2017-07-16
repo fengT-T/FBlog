@@ -3,6 +3,7 @@
     <h3>
       <router-link :to="`/article/${article._id}`">{{article.title}}</router-link>
       <slot name="edit"></slot>
+      <slot name="delete"></slot>
     </h3>
     <div class="time">
       <span v-show="show_name">作者：

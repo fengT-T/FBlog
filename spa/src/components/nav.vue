@@ -21,7 +21,7 @@
             </ul>
           </div>
         </button>
-        <a href="" class="btn btn-link nav-left">About</a>
+        <a href="#/list/about" class="btn btn-link nav-left">About</a>
       </section>
       <section class="navbar-section">
         <div class="input-group input-inline">

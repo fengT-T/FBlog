@@ -30,6 +30,12 @@ export default {
       state.page = state.page + 1
       state.articleList = state.articleList.concat(payload)
     },
+    delUserArticleList (state, index) {
+      state.articleList.splice(index, 1)
+    },
+    setUserArticleList (state, payload) {
+      state.articleList.splice(payload.index, 1, payload.article)
+    },
     setUserArticleListEnd (state) {
       state.isEnd = true
     }

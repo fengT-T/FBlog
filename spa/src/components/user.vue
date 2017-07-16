@@ -57,8 +57,11 @@
         <!--这个是博客文章-->
         <div v-show="select === 'Blog'" @click="modifyArticle">
           <aritle-item v-for="(item,index) in articleList" :article="item" :key="item._id">
-            <button class="float-right btn btn-link" slot="edit" :f-index="index">
-              <i class="icon icon-edit" :f-index="index"></i>
+            <button class="float-right btn btn-link" slot="edit" action="delete" :f-index="index">
+              <i class="icon icon-cross" action="delete" :f-index="index"></i>
+            </button>
+            <button class="float-right btn btn-link" action="modify"  slot="edit" :f-index="index">
+              <i class="icon icon-edit" action="modify" :f-index="index"></i>
             </button>
           </aritle-item>
           <div class="text-center">
@@ -164,14 +167,24 @@ export default {
         this.moreBlog()
       }
     },
-    modifyArticle (event) {
+    async modifyArticle (event) {
       let index = event.target.getAttribute('f-index')
-      this.edit.data = JSON.parse(JSON.stringify(this.articleList[index]))
-      this.select = 'Create'
+      let action = event.target.getAttribute('action')
+      let article = this.articleList[index]
+      if (action === 'modify') {
+        this.edit.data = JSON.parse(JSON.stringify(article))
+        this.select = 'Create'
+      } else {
+        await this.$http.get(`/user/deleteArticle?id=${article._id}`)
+        this.$store.commit('delUserArticleList', index)
+      }
     },
     async createArticle () {
       this.edit.loading = true
-      await this.$http.post(`/user/${this.edit.data._id ? 'modifyArticle' : 'createArticle'}`, this.edit.data)
+      let article = (await this.$http.post(`/user/${this.edit.data._id ? 'modifyArticle' : 'createArticle'}`, this.edit.data)).data
+      this.edit.data._id ? this.$store.commit('setUserArticleList', this.edit.data)
+       : this.$store.commit('addUserArticleList', [article])
+      this.edit.loading = false
       this.edit = {data: {title: '', summary: '', content: '', tag: []}, loading: false}
     },
     async userInfoModify () {
