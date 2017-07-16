@@ -72,10 +72,12 @@ router.post('/createArticle', async function (ctx, next) {
 router.post('/modifyArticle', async function (ctx, next) {
   let { Article } = ctx.model
   let body = ctx.request.body
+  // let articleId = body._id
   ctx.assert(body.author === ctx.session.user._id, ...global.ERROR.DEFAULTINPUTERROR)
   try {
-    await Article.findOneAndUpdate(body._id, body).exec()
+    await Article.findByIdAndUpdate(body._id, body).exec()
   } catch (e) {
+    console.log(e)
     ctx.throw(...global.ERROR.DEFAULTINPUTERROR)
   }
   ctx.status = 200

@@ -33,8 +33,8 @@ export default {
     delUserArticleList (state, index) {
       state.articleList.splice(index, 1)
     },
-    setUserArticleList (state, payload) {
-      state.articleList.splice(payload.index, 1, payload.article)
+    setUserArticleList (state, {index, data}) {
+      state.articleList.splice(index, 1, data)
     },
     setUserArticleListEnd (state) {
       state.isEnd = true

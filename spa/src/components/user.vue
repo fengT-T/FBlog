@@ -173,6 +173,7 @@ export default {
       let article = this.articleList[index]
       if (action === 'modify') {
         this.edit.data = JSON.parse(JSON.stringify(article))
+        this.edit.index = index
         this.select = 'Create'
       } else {
         await this.$http.get(`/user/deleteArticle?id=${article._id}`)
@@ -182,7 +183,7 @@ export default {
     async createArticle () {
       this.edit.loading = true
       let article = (await this.$http.post(`/user/${this.edit.data._id ? 'modifyArticle' : 'createArticle'}`, this.edit.data)).data
-      this.edit.data._id ? this.$store.commit('setUserArticleList', this.edit.data)
+      this.edit.data._id ? this.$store.commit('setUserArticleList', this.edit)
        : this.$store.commit('addUserArticleList', [article])
       this.edit.loading = false
       this.edit = {data: {title: '', summary: '', content: '', tag: []}, loading: false}
