@@ -11,7 +11,9 @@ const mongoose = require('mongoose')
 const glob = require('glob')
 const path = require('path')
 const conf = require('./config/app')
+const favicon = require('koa-favicon')
 
+app.use(favicon('http://blogstatic-1252075019.cosgz.myqcloud.com/static/favicon.ico'))
 // error handler
 // onerror(app)
 // my error handle
