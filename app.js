@@ -1,8 +1,6 @@
 const Koa = require('koa')
 const app = new Koa()
-// const views = require('koa-views')
 const json = require('koa-json')
-// const onerror = require('koa-onerror')
 const errorHandle = require('./bin/errorHandle')
 const koaBody = require('koa-body')
 const logger = require('koa-logger')
@@ -12,10 +10,10 @@ const glob = require('glob')
 const path = require('path')
 const conf = require('./config/app')
 const favicon = require('koa-favicon')
+const http = require('http')
+const server = http.createServer(app.callback())
 
-app.use(favicon('http://blogstatic-1252075019.cosgz.myqcloud.com/static/favicon.ico'))
-// error handler
-// onerror(app)
+app.use(favicon(path.join(__dirname, 'favicon.ico')))
 // my error handle
 app.use(errorHandle)
 // middlewares
@@ -23,11 +21,6 @@ app.use(koaBody())
 app.use(session(conf.session, app))
 app.use(json())
 app.use(logger())
-// app.use(require('koa-static')(path.join(__dirname, 'public')))
-
-// app.use(views(path.join(__dirname, 'views'), {
-//   extension: 'pug'
-// }))
 
 // logger
 app.use(async (ctx, next) => {
@@ -54,7 +47,6 @@ mongoose.Promise = global.Promise
 mongoose.connect(conf.mongodb.connUrl, {
   useMongoClient: true
 })
-// mongoose.connect(conf.mongodb.connUrl, {config: { autoIndex: false }});
 /***
  * 最后永远是routes
  * 机智的采用了glob引入路由文件
@@ -67,3 +59,5 @@ global.ERROR = {}
 global.ERROR.INPUTERROR = 'Suprise!MotherFucker!'
 global.ERROR.DEFAULTINPUTERROR = [422, global.ERROR.INPUTERROR]
 module.exports = app
+
+server.listen(80)

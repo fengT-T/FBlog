@@ -8,8 +8,11 @@ router.prefix('/user')
  * 过滤未登录用户
  */
 router.use('/', async (ctx, next) => {
-  ctx.assert(ctx.session.user, ...global.ERROR.DEFAULTINPUTERROR)
-  await next()
+  if (ctx.session.user) {
+    await next()
+  } else {
+    ctx.status = 401
+  }
 })
 /**
  * 信息更新，值得一提的是所有数据验证基本在前端做好了，后台并不需要返回错误信息

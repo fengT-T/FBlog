@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node bin/www",
-    "dev": "./node_modules/.bin/nodemon bin/www",
-    "inspect": "./node_modules/.bin/nodemon --inspect bin/www",
-    "prd": "pm2 start bin/www",
+    "start": "node app.js",
+    "dev": "./node_modules/.bin/nodemon app.js",
+    "inspect": "./node_modules/.bin/nodemon --inspect app.js",
+    "prd": "pm2 start app.js",
     "test": "./node_modules/mocha/bin/mocha",
     "standard": "./node_modules/.bin/standard"
   },
