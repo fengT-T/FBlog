@@ -60,4 +60,4 @@ global.ERROR.INPUTERROR = 'Suprise!MotherFucker!'
 global.ERROR.DEFAULTINPUTERROR = [422, global.ERROR.INPUTERROR]
 module.exports = app
 
-server.listen(80)
+process.env.NODE_ENV === 'production' ? server.listen(80) : server.listen(3000)
