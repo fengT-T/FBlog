@@ -23,12 +23,8 @@
       </p>
     </div>
 
-    <button v-show="!isEnd" @click="getArticleList" class="btn btn-block" :class="{loading : isLoading}" >
-      <p>Next</p>
-    </button>
+    <div class="loading loading-lg" v-show="isLoading"></div>
 
-    <div v-if="isEnd" class="divider text-center" data-content="End"></div>
-    
   </div>
 </template>
 
@@ -36,7 +32,7 @@
 import {get} from 'axios'
 import common from '../common'
 const {dateFormat, getDateFromMongodbId} = common
-const limit = 5
+const limit = 100
 const initStatus = {
   articleList: [],
   isEnd: false,
@@ -61,8 +57,7 @@ export default {
       this.isLoading = true
       let {data} = (await get(`/article?limit=${limit}${tagSting}${offsetString}`))
       this.isLoading = false
-      this.articleList = this.articleList.concat(data)
-      if (data.length < limit) this.isEnd = true
+      this.articleList = data
     },
     formatDate (id) {
       return dateFormat(getDateFromMongodbId(id), 'yyyy-MM-dd hh:mm:ss')

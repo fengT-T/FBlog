@@ -4,16 +4,21 @@
       {{article.title}}
     </h1>
     <p class="time">
-      2014.5.5
+      {{formatDate(article._id)}}
     </p>
     <p class="summary">
       {{article.summary}}
     </p>
     <div class="article-content" v-html="article.content"></div>
+    <div class="loading loading-lg" v-show="isLoading"></div>
+
   </div>
 </template>
 <script>
 import {get} from 'axios'
+import common from '../common'
+const {dateFormat, getDateFromMongodbId} = common
+
 export default {
   data () {
     return {
@@ -21,11 +26,19 @@ export default {
         title: 'Loading',
         summary: '',
         content: ''
-      }
+      },
+      isLoading: false
+    }
+  },
+  methods: {
+    formatDate (id) {
+      return id && dateFormat(getDateFromMongodbId(id), 'yyyy-MM-dd hh:mm:ss')
     }
   },
   async beforeMount () {
+    this.isLoading = true
     let {data} = await get(`/article/${this.$route.params.id}`)
+    this.isLoading = false
     this.article = data
   }
 }
