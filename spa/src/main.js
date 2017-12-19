@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import 'spectre.css/dist/spectre.css'
 import 'spectre.css/dist/spectre-icons.css'
+import 'spectre.css/dist/spectre-exp.css'
 
 Vue.config.productionTip = false
 
